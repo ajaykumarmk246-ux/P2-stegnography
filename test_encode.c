@@ -2,37 +2,76 @@
 #include "encode.h"
 #include "types.h"
 
+//-------------------------------------------------------------------------------//
+
 int main(int argc,char *argv[])
 {
     EncodeInfo encInfo;
-    //->call check_operation_type(argv[1][1])==e_encode
-    /*
-    ->call read_and_validate_encode_args(char *argv[], EncodeInfo *encIn)==e_succes
-       =>call do_encoding((&EncodeInfo *encInfo)
-    */
+
+   //check e or d from argv[1][1]
+    if(check_operation_type(argv[1][1])==e_encode)
+    {
+        if(read_and_validate_encode_args(argv, &encInfo)==e_failure)
+        {
+            printf("\nInvalid input..\n");
+            printf("\n");
+            return 0;
+        }
+        if(do_encoding(&encInfo)==e_failure)
+        {
+            printf("\nError : unable to encode..\n");
+            return 0;
+        }
+       printf("\nEncoding done successfully...\n");
+       printf("\n");
+       return 0;
+    }
+    else if(check_operation_type(argv[1][1])==e_decode)
+    { 
+        if(read_and_validate_decode_args(argv, &encInfo)==e_failure)
+        {
+            printf("\nInvalid input..\n");
+            printf("\n");
+            return 0;
+        }
+        if(do_decoding(&encInfo)==e_failure)
+        {
+            printf("\nError : unable to decode..\n");
+            return 0;
+        }
+       printf("\nDecoding done successfully...\n");
+       printf("\n");
+       return 0;
+    }
+    else
+    {
+        printf("\nValidation failed\n");
+        printf("\n-------- SAMPLE INPUTS --------\n");
+            printf("\n./a.out -e source_file.bmp secret_file.txt [output_file(.bmp .py .txt)]\n");
+            printf("./a.out -d source_file.bmp [output_file(.bmp .py .txt)]\n");
+            printf("\n");
+        return 0;
+    }
 
     return 0;
 }
-operation type check operation_type(char opt);
+
+//-------------------------------------------------------------------------------//
+
+OperationType check_operation_type(char opt)
 {
-/*
-*check opt is 'e'
-return e_encode
-*check opt is 'd'
-return e_decode
-*else
-return e_unsupported
-*/
-if(opt=='e')
-{
-    return e_encode;
+    if(opt=='e')
+    {
+        return e_encode;
+    }
+    else if(opt=='d')
+    {
+        return e_decode;
+    }
+    else
+    {
+        return e_unsupported;
+    }
 }
-else if(opt=='d')
-{
-    return e_decode;
-}
-else
-{
-return e_unsupported;
-}
-}
+
+//-------------------------------------------------------------------------------//
