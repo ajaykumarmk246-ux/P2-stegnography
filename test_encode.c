@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "decode.h"
 #include "encode.h"
 #include "types.h"
 
@@ -6,48 +7,53 @@
 
 int main(int argc,char *argv[])
 {
-    EncodeInfo encInfo;
-
    //check e or d from argv[1][1]
-    if(check_operation_type(argv[1][1])==e_encode)
+    if(argc>=3 && check_operation_type(argv[1][1])==e_encode)
     {
+        EncodeInfo encInfo;
         if(read_and_validate_encode_args(argv, &encInfo)==e_failure)
         {
-            printf("\nInvalid input..\n");
+            printf("\n-------- SAMPLE INPUTS --------\n");
+            printf("\n./a.out -e source_file.bmp secret_file.txt [output_file.bmp]\n");
+            printf("./a.out -d source_file.bmp [output_file(.bmp .py .txt )]\n");
             printf("\n");
             return 0;
         }
         if(do_encoding(&encInfo)==e_failure)
         {
-            printf("\nError : unable to encode..\n");
+            printf("\nERROR : Unable to encode\n");
             return 0;
         }
-       printf("\nEncoding done successfully...\n");
+       printf("\nEncoding Completed.\n");
        printf("\n");
        return 0;
     }
-    else if(check_operation_type(argv[1][1])==e_decode)
+    else if(argc>=2 && check_operation_type(argv[1][1])==e_decode)
     { 
-        if(read_and_validate_decode_args(argv, &encInfo)==e_failure)
+        DecodeInfo decInfo;
+        if(read_and_validate_decode_args(argv, &decInfo)==e_failure)
         {
-            printf("\nInvalid input..\n");
+            //printf("\nInvalid input..\n");
+            printf("\n-------- SAMPLE INPUTS --------\n");
+            printf("\n./a.out -e source_file.bmp secret_file.txt [output_file.bmp]\n");
+            printf("./a.out -d source_file.bmp [output_file(.bmp .py .txt)]\n");
             printf("\n");
             return 0;
         }
-        if(do_decoding(&encInfo)==e_failure)
+        if(do_decoding(&decInfo)==e_failure)
         {
-            printf("\nError : unable to decode..\n");
+            printf("\nERROR : Unable to decode\n");
             return 0;
         }
-       printf("\nDecoding done successfully...\n");
+       printf("\nDecoding Completed.\n");
        printf("\n");
        return 0;
     }
     else
     {
-        printf("\nValidation failed\n");
+        printf("\nInvalid input\n");
         printf("\n-------- SAMPLE INPUTS --------\n");
-            printf("\n./a.out -e source_file.bmp secret_file.txt [output_file(.bmp .py .txt)]\n");
+            printf("\n./a.out -e source_file.bmp secret_file.txt [output_file.bmp]\n");
             printf("./a.out -d source_file.bmp [output_file(.bmp .py .txt)]\n");
             printf("\n");
         return 0;
